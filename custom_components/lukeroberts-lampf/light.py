@@ -5,17 +5,16 @@ from . import http_client as HTTPAirClient
 from . import plain_coap_client as PlainCoAPAirClient
 import voluptuous as vol
 import homeassistant.helpers.config_validation as cv
-from homeassistant.components.fan import FanEntity, PLATFORM_SCHEMA
+from homeassistant.components.light import LightEntity, PLATFORM_SCHEMA
 
 __version__ = "0.1.0"
 
-CONF_HOST = "host"
+CONF_MAC = "mac"
 CONF_NAME = "name"
-CONF_PROTOCOL = "protocol"
 
-DEFAULT_NAME = "Philips AirPurifier"
-DEFAULT_PROTOCOL = "1"
+DEFAULT_NAME = "Luke Roberts Lamp F"
 ICON = "mdi:air-purifier"
+
 
 SPEED_LIST = [
     "Auto Mode",
@@ -29,9 +28,8 @@ SPEED_LIST = [
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
     {
-        vol.Required(CONF_HOST): cv.string,
+        vol.Required(CONF_MAC): cv.string,
         vol.Optional(CONF_NAME, default=DEFAULT_NAME): cv.string,
-        vol.Optional(CONF_PROTOCOL, default=DEFAULT_PROTOCOL): cv.string,
     }
 )
 
@@ -40,15 +38,14 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
 
 
 def setup_platform(hass, config, add_devices, discovery_info=None):
-    add_devices([PhilipsAirPurifierFan(hass, config)])
+    add_devices([LukeRobertsLampFLight(hass, config)])
 
 
-class PhilipsAirPurifierFan(FanEntity):
+class LukeRobertsLampFLight(LightEntity):
     def __init__(self, hass, config):
         self.hass = hass
-        self._host = config[CONF_HOST]
+        self._mac = config[CONF_MAC]
         self._name = config[CONF_NAME]
-        self._protocol = config[CONF_PROTOCOL]
         self._state = None
         self._session_key = None
 
