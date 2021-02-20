@@ -1,0 +1,4 @@
+.DS_Store
+logging.conf
+Philips-Airpurifier.code-workspace
+/custom_components/philips-airpurifier/__pycache__
