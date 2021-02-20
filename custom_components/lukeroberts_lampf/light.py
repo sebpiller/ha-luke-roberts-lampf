@@ -1,4 +1,4 @@
-"""Philips Air Purifier & Humidifier"""
+"""Luke Roberts Lamp F"""
 from . import status_transformer as STATUS_TRANSFORMER
 from . import coap_client as CoAPAirClient
 from . import http_client as HTTPAirClient
@@ -13,7 +13,7 @@ CONF_MAC = "mac"
 CONF_NAME = "name"
 
 DEFAULT_NAME = "Luke Roberts Lamp F"
-ICON = "mdi:air-purifier"
+ICON = "mdi:light"
 
 
 SPEED_LIST = [
