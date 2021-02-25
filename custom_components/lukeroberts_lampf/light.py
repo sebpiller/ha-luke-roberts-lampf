@@ -9,6 +9,7 @@ import homeassistant.helpers.config_validation as cv
 from homeassistant.components.light import (
     ATTR_BRIGHTNESS, PLATFORM_SCHEMA, LightEntity)
 from homeassistant.const import CONF_HOST
+import awesomelights
 
 from .lampf_bt import LampFBle
 
@@ -17,8 +18,8 @@ _LOGGER = logging.getLogger(__name__)
 # Validation of the user's configuration
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Required(CONF_HOST): cv.string,
-    #vol.Optional(CONF_USERNAME, default='admin'): cv.string,
-    #vol.Optional(CONF_PASSWORD): cv.string,
+    # vol.Optional(CONF_USERNAME, default='admin'): cv.string,
+    # vol.Optional(CONF_PASSWORD): cv.string,
 })
 
 
@@ -27,11 +28,11 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
     # Assign configuration variables.
     # The configuration check takes care they are present.
     host = config[CONF_HOST]
-    #username = config[CONF_USERNAME]
-    #password = config.get(CONF_PASSWORD)
+    # username = config[CONF_USERNAME]
+    # password = config.get(CONF_PASSWORD)
 
     # Setup connection with devices/cloud
-    #hub = awesomelights.Hub(host, username, password)
+    # hub = awesomelights.Hub(host, username, password)
 
     # Verify that passed in configuration works
     # if not hub.is_valid_login():
@@ -39,8 +40,7 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
     #     return
 
     # Add devices
-    # add_entities(LampFLight(light) for light in hub.lights())
-    add_entities(LampFLight())
+    add_entities(LampFLight(light) for light in hub.lights())
 
 
 class LampFLight(LightEntity):
@@ -77,12 +77,18 @@ class LampFLight(LightEntity):
         You can skip the brightness part if your light does not support
         brightness control.
         """
-        # self._light.brightness = kwargs.get(ATTR_BRIGHTNESS, 255)
         self._light.power = True
+        self._light.bottom_brightness = kwargs.get(ATTR_BRIGHTNESS, 255)
 
     def turn_off(self, **kwargs):
         """Instruct the light to turn off."""
         self._light.power = False
+
+    async def async_turn_on(self, **kwargs):
+        """Turn device on."""
+
+    async def async_turn_off(self, **kwargs):
+        """Turn device off."""
 
     def update(self):
         """Fetch new state data for this light.

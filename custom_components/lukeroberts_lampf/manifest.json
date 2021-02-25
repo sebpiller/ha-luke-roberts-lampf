@@ -1,8 +1,8 @@
 {
-  "domain": "lukeroberts-lampf",
+  "domain": "lukeroberts_lampf",
   "name": "Luke Roberts Lamp F",
   "documentation": "https://github.com/sebpiller/ha-luke-roberts-lampf.git",
-  "dependencies": [],
+  "dependencies": ["awesomelights==1.2.3"],
   "codeowners": ["@sebpiller"],
   "requirements": []
 }
