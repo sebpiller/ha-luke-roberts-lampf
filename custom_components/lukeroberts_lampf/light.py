@@ -1,8 +1,6 @@
 """Luke Roberts Lamp F"""
 from . import status_transformer as STATUS_TRANSFORMER
-from . import coap_client as CoAPAirClient
-from . import http_client as HTTPAirClient
-from . import plain_coap_client as PlainCoAPAirClient
+
 import voluptuous as vol
 import homeassistant.helpers.config_validation as cv
 from homeassistant.components.light import LightEntity, PLATFORM_SCHEMA
@@ -67,13 +65,6 @@ class LukeRobertsLampFLight(LightEntity):
         self._water_level = None
         self._child_lock = None
 
-        if self._protocol == "1":
-            self._client = HTTPAirClient.HTTPAirClient(self._host)
-            #self._client.load_key()
-        if self._protocol == "2":
-            self._client = PlainCoAPAirClient.PlainCoAPAirClient(self._host)
-        else:
-            self._client = CoAPAirClient.CoAPAirClient(self._host)
 
         self.update()
 
