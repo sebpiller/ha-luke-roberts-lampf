@@ -8,31 +8,33 @@ import voluptuous as vol
 from homeassistant.components.light import (
     ATTR_BRIGHTNESS, PLATFORM_SCHEMA, LightEntity, SUPPORT_BRIGHTNESS, SUPPORT_COLOR_TEMP, SUPPORT_COLOR,
     SUPPORT_EFFECT, SUPPORT_FLASH, SUPPORT_TRANSITION)
-from homeassistant.const import CONF_HOST
+from homeassistant.const import CONF_HOST, CONF_NAME
 
 from .lampf_bt import LampFBle
 
 _LOGGER = logging.getLogger(__name__)
 
+DEFAULT_NAME = "Luke Roberts Lamp F"
+# ICON = "mdi:light"
+
 # Validation of the user's configuration
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Required(CONF_HOST): cv.string,
-    # vol.Optional(CONF_USERNAME, default='admin'): cv.string,
+    vol.Optional(CONF_NAME, default=DEFAULT_NAME): cv.string,
     # vol.Optional(CONF_PASSWORD): cv.string,
 })
 
 
 def setup_platform(hass, config, add_entities, discovery_info=None):
     _LOGGER.info("setup platform " + config)
-    """Set up Tuya light platform."""
-    if discovery_info is None:
-        return
-    """Set up the Awesome Light platform."""
+
+    # if discovery_info is None:
+    #     return
+
     # Assign configuration variables.
     # The configuration check takes care they are present.
     host = config[CONF_HOST]
-    # username = config[CONF_USERNAME]
-    # password = config.get(CONF_PASSWORD)
+    name = config[CONF_NAME]
 
     # Setup connection with devices/cloud
     # hub = awesomelights.Hub(host, username, password)
@@ -43,19 +45,20 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
     #     return
 
     # Add devices
-    add_entities(LampFLight(LampFBle()))
+    add_entities([LampFLight(LampFBle(host, name))])
 
 
 class LampFLight(LightEntity):
     """Representation of an Awesome Li§ght."""
 
-    def __init__(self, lampf: LampFBle):
+    def __init__(self, lampf: LampFBle, name):
         _LOGGER.info("creating LampFLight entity ")
         """Initialize an AwesomeLight."""
         self._light = lampf
-        self._name = "LampF"
-        self._state = None
-        self._brightness = None
+        self._name = name
+        self._state = False
+        self._brightness = 0
+        self.update()
 
     @property
     def name(self):
@@ -97,25 +100,33 @@ class LampFLight(LightEntity):
         brightness control.
         """
         self._light.power = True
+        self._state = True
         self.brightness = kwargs.get(ATTR_BRIGHTNESS, 255)
 
     def turn_off(self, **kwargs):
         """Instruct the light to turn off."""
+        self._state = False
         self._light.power = False
 
-    async def async_turn_on(self, **kwargs):
-        """Turn device on."""
-
-    async def async_turn_off(self, **kwargs):
-        """Turn device off."""
+    # async def async_turn_on(self, **kwargs):
+    #     """Turn device on."""
+    #
+    # async def async_turn_off(self, **kwargs):
+    #     """Turn device off."""
 
     def update(self):
         """Fetch new state data for this light.
         This is the only method that should fetch new data for Home Assistant.
         """
-        self._light.update()
-        self._state = self._light.power
-        self._brightness = self._light.bottom_brightness
+        try:
+            # self._light.update()
+            self._state = self._light.power
+            self._brightness = self._light.bottom_brightness
+        except Exception as e:
+            print(type(e))
+            print(e.args)
+            print(e)
+            print("End of try of update!")
 
     @property
     def supported_features(self):
