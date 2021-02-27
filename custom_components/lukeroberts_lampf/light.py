@@ -23,6 +23,8 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
 
 
 def setup_platform(hass, config, add_entities, discovery_info=None):
+    _LOGGER.info("setup platform " + config)
+
     """Set up the Awesome Light platform."""
     # Assign configuration variables.
     # The configuration check takes care they are present.
@@ -47,6 +49,7 @@ class LampFLight(LightEntity):
     """Representation of an Awesome Li§ght."""
 
     def __init__(self):
+        _LOGGER.info("creating LampFLight entity ")
         """Initialize an AwesomeLight."""
         self._light = LampFBle()
         self._name = "dfgsdg"
@@ -88,6 +91,6 @@ class LampFLight(LightEntity):
         """Fetch new state data for this light.
         This is the only method that should fetch new data for Home Assistant.
         """
-        self._light.update()
+        # self._light.update()
         self._state = self._light.power
         self._brightness = self._light.bottom_brightness
