@@ -1,13 +1,11 @@
 """Luke Roberts Lamp F"""
 
-import logging
-
 import homeassistant.helpers.config_validation as cv
+import logging
 import voluptuous as vol
 # Import the device class from the component that you want to support
 from homeassistant.components.light import (
-    ATTR_BRIGHTNESS, PLATFORM_SCHEMA, LightEntity, SUPPORT_BRIGHTNESS, SUPPORT_COLOR_TEMP, SUPPORT_COLOR,
-    SUPPORT_EFFECT, SUPPORT_FLASH, SUPPORT_TRANSITION)
+    ATTR_BRIGHTNESS, PLATFORM_SCHEMA, LightEntity, SUPPORT_BRIGHTNESS)
 from homeassistant.const import CONF_HOST, CONF_NAME
 
 from .lampf_bt import LampFBle
@@ -23,6 +21,21 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Optional(CONF_NAME, default=DEFAULT_NAME): cv.string,
     # vol.Optional(CONF_PASSWORD): cv.string,
 })
+
+
+async def async_setup_platform(hass, config, async_add_entities, discovery_info=None):
+    """Set up platform."""
+    # Code for setting up your platform inside of the event loop.
+    # if discovery_info is None:
+    #     return
+
+    # Assign configuration variables.
+    # The configuration check takes care they are present.
+    _LOGGER.info("async setup platform " + config)
+    host = config[CONF_HOST]
+    name = config[CONF_NAME]
+
+    async_add_entities([LampFLight(LampFBle(host, name))])
 
 
 def setup_platform(hass, config, add_entities, discovery_info=None):
