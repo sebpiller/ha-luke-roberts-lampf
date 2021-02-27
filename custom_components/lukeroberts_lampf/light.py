@@ -32,13 +32,13 @@ async def async_setup_entry(
         entry: ConfigEntry,
         async_add_entities: Callable[[List[Entity], bool], None],
 ) -> None:
-    _LOGGER.info("async_setup_entry " + entry)
+    _LOGGER.warning("async_setup_entry " + entry)
     host = entry[CONF_HOST]
     name = entry[CONF_NAME]
 
     # elgato: Elgato = hass.data[DOMAIN][entry.entry_id][DATA_ELGATO_CLIENT]
     # info = await elgato.info()
-    async_add_entities([LampFLight(LampFBle(host, name))])
+    async_add_entities([LampFLight(LampFBle(host, name))], True)
 
 
 async def async_setup_platform(hass, config, async_add_entities, discovery_info=None):
@@ -49,7 +49,7 @@ async def async_setup_platform(hass, config, async_add_entities, discovery_info=
 
     # Assign configuration variables.
     # The configuration check takes care they are present.
-    _LOGGER.info("async setup platform " + config)
+    _LOGGER.warning("async setup platform " + config)
     host = config[CONF_HOST]
     name = config[CONF_NAME]
 
@@ -57,7 +57,7 @@ async def async_setup_platform(hass, config, async_add_entities, discovery_info=
 
 
 def setup_platform(hass, config, add_entities, discovery_info=None):
-    _LOGGER.info("setup platform " + config)
+    _LOGGER.warning("setup platform " + config)
 
     # if discovery_info is None:
     #     return
@@ -83,7 +83,7 @@ class LampFLight(LightEntity):
     """Representation of an Awesome Li§ght."""
 
     def __init__(self, lampf: LampFBle, name):
-        _LOGGER.info("creating LampFLight entity ")
+        _LOGGER.warning("creating LampFLight entity ")
         """Initialize an AwesomeLight."""
         self._light = lampf
         self._name = name

@@ -9,6 +9,7 @@ from bluepy.btle import Peripheral, Characteristic, UUID, ADDR_TYPE_RANDOM
 import logging
 
 
+_LOGGER = logging.getLogger(__name__)
 
 class Scene(Enum):
     """ Scenes from the default Luke Roberts configuration. """
@@ -46,7 +47,7 @@ class LampFBle:
     """
 
     def __init__(self, mac="C4:AC:05:42:73:A4"):
-        logging.warning('building LampFBle...')
+        _LOGGER.info('building LampFBle...')
 
         """ Constructor. """
         self._mac = mac

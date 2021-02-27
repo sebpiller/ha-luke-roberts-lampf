@@ -1,3 +1,4 @@
 import logging
 
-logging.warning('Initializing Luke Roberts Lamp F')
+_LOGGER = logging.getLogger(__name__)
+_LOGGER.warning('Initializing Luke Roberts Lamp F')
