@@ -1,15 +1,14 @@
 import abc
 import colorsys
+import logging
 from builtins import print
 from enum import Enum
 from typing import List
 
 from bluepy.btle import Peripheral, Characteristic, UUID, ADDR_TYPE_RANDOM
 
-import logging
-
-
 _LOGGER = logging.getLogger(__name__)
+
 
 class Scene(Enum):
     """ Scenes from the default Luke Roberts configuration. """
