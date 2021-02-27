@@ -1,4 +1,6 @@
 {
     "name": "Luke Roberts Lamp F",
-    "render_readme": "true"
+    "render_readme": "true",
+    "domains": ["lukeroberts_lampf"],
+    "filename": "light.py"
 }
