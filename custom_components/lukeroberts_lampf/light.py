@@ -1,4 +1,5 @@
 """Luke Roberts Lamp F"""
+from typing import Callable, List
 
 import homeassistant.helpers.config_validation as cv
 import logging
@@ -6,7 +7,10 @@ import voluptuous as vol
 # Import the device class from the component that you want to support
 from homeassistant.components.light import (
     ATTR_BRIGHTNESS, PLATFORM_SCHEMA, LightEntity, SUPPORT_BRIGHTNESS)
+from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_HOST, CONF_NAME
+from homeassistant.helpers.entity import Entity
+from homeassistant.helpers.typing import HomeAssistantType
 
 from .lampf_bt import LampFBle
 
@@ -21,6 +25,20 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Optional(CONF_NAME, default=DEFAULT_NAME): cv.string,
     # vol.Optional(CONF_PASSWORD): cv.string,
 })
+
+
+async def async_setup_entry(
+        hass: HomeAssistantType,
+        entry: ConfigEntry,
+        async_add_entities: Callable[[List[Entity], bool], None],
+) -> None:
+    _LOGGER.info("async_setup_entry " + entry)
+    host = entry[CONF_HOST]
+    name = entry[CONF_NAME]
+
+    # elgato: Elgato = hass.data[DOMAIN][entry.entry_id][DATA_ELGATO_CLIENT]
+    # info = await elgato.info()
+    async_add_entities([LampFLight(LampFBle(host, name))])
 
 
 async def async_setup_platform(hass, config, async_add_entities, discovery_info=None):
